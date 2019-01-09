@@ -7,6 +7,7 @@ import (
 	"github.com/cressyfrost/morgana/commands"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -15,7 +16,14 @@ var (
 )
 
 func main() {
-	discord, err := discordgo.New("Bot NTI5OTI3MjA5MzQzOTA5ODg4.Dw3_2w.kj7ntGLUw2EJCjDlnQJh4Pt6ATE")
+	viper.SetConfigName("config")
+	viper.AddConfigPath("./etc")
+	err := viper.ReadInConfig() // Find and read the config file
+	if err != nil {             // Handle errors reading the config file
+		panic(fmt.Errorf("Fatal error config file: %s", err))
+	}
+
+	discord, err := discordgo.New("Bot " + viper.GetString("Discord.BotKey"))
 	errCheck("error creating discord session", err)
 	user, err := discord.User("@me")
 	errCheck("error retrieving account", err)
@@ -69,6 +77,6 @@ func commandHandler(discord *discordgo.Session, message *discordgo.MessageCreate
 	default:
 		discord.ChannelMessageSend(message.ChannelID, "Hey, i didn't recognize that command!")
 	}
-
+	return
 	//fmt.Printf("Message: %+v || From: %s\n", message.Message, message.Author)
 }

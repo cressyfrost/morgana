@@ -1,0 +1,6 @@
+[XIVAPI]
+APIKey = ""
+BaseURL = "https://xivapi.com"
+
+[Discord]
+BotKey = ""
